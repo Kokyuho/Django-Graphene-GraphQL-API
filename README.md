@@ -1,14 +1,27 @@
-## Django-Graphene-GraphQL-API
+# Django-Graphene-GraphQL-API
 
 In this project, I build a simple GraphQL API in Django with Django-Graphene able 
 to perform CRUD operations on a 'Projects' database.
 
-# Install steps:
+### Install steps:
 0. Running with python 3.8
 1. "pip install -r requirements.txt" in your venv
 2. "python manage.py runserver"
-3. Navigate to /graphql
 
-# API endpoints:
+### API endpoint:
+- http://127.0.0.1:8000/graphql --> graphiQL
+
+### Queries:
+- apiDescription
 - allKeywords
 - allProjects
+- keywordById(id:id)
+- projectById(id:id)
+
+### Mutations:
+- 
+
+### To Do:
+- Implement CRUD operations for keyword and project
+- Implement unit testing of all
+- Implement continuous integration with github actions
