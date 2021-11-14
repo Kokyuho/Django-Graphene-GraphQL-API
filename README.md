@@ -19,9 +19,13 @@ to perform CRUD operations on a 'Projects' database.
 - projectById(id:id)
 
 ### Mutations:
-- 
+- createKeyword
+- updateKeyword
+- deleteKeyword 
+- createProject
+- updateProject
+- deleteProject
 
 ### To Do:
-- Implement CRUD operations for keyword and project
 - Implement unit testing of all
 - Implement continuous integration with github actions

@@ -4,6 +4,7 @@ from graphene_django import DjangoListField
 from .models import Keyword, Project
 
 
+#******************* TYPES *************************#
 class KeywordType(DjangoObjectType):
     class Meta:
         model = Keyword
@@ -15,6 +16,7 @@ class ProjectType(DjangoObjectType):
         fields = ("id","name","date","duration","description","keywords")
 
 
+#******************* QUERY *************************#
 class Query(graphene.ObjectType):
     api_description = graphene.String()
 
@@ -40,6 +42,112 @@ class Query(graphene.ObjectType):
         return Project.objects.get(pk=id)
 
 
-schema = graphene.Schema(query=Query)
+#******************* KEYWORD-CRUD-MUTATIONS *************************#
+class CreateKeyword(graphene.Mutation):
+
+    # Define the arguments we can pass to the create method
+    class Arguments:
+        word = graphene.String(required=True)
+    
+    # Define what it returns
+    keyword = graphene.Field(KeywordType)
+
+    # Define the mutation itself
+    @classmethod
+    def mutate(cls, root, info, word):
+        keyword = Keyword(word=word)
+        keyword.save()
+        # return an instance of the Mutation class
+        return CreateKeyword(keyword=keyword)
+
+class UpdateKeyword(graphene.Mutation):
+
+    class Arguments:
+        id = graphene.ID()
+        word = graphene.String(required=True)
+    
+    keyword = graphene.Field(KeywordType)
+
+    @classmethod
+    def mutate(cls, root, info, id, word):
+        keyword = Keyword.objects.get(pk=id)
+        keyword.word = word
+        keyword.save()
+        return UpdateKeyword(keyword=keyword)
+
+class DeleteKeyword(graphene.Mutation):
+
+    class Arguments:
+        id = graphene.ID()
+    
+    keyword = graphene.Field(KeywordType)
+
+    @classmethod
+    def mutate(cls, root, info, id):
+        keyword = Keyword.objects.get(pk=id)
+        keyword.delete()
+        return DeleteKeyword(keyword=keyword)
+
+#******************* PROJECT-CRUD-MUTATIONS *************************#
+class CreateProject(graphene.Mutation):
+
+    # Define the arguments we can pass to the create method
+    class Arguments:
+        name = graphene.String(required=True)
+        date = graphene.Date(required=True)
+        duration = graphene.Int(required=True)
+    
+    # Define what it returns
+    project = graphene.Field(ProjectType)
+
+    # Define the mutation itself
+    @classmethod
+    def mutate(cls, root, info, name, date, duration):
+        project = Project(name=name, date=date, duration=duration)
+        project.save()
+        # return an instance of the Mutation class
+        return CreateProject(project=project)
+
+class UpdateProject(graphene.Mutation):
+
+    class Arguments:
+        id = graphene.ID()
+        name = graphene.String(required=True)
+    
+    project = graphene.Field(ProjectType)
+
+    @classmethod
+    def mutate(cls, root, info, id, name):
+        project = Project.objects.get(pk=id)
+        project.name = name
+        project.save()
+        return UpdateProject(project=project)
+
+class DeleteProject(graphene.Mutation):
+
+    class Arguments:
+        id = graphene.ID()
+    
+    project = graphene.Field(ProjectType)
+
+    @classmethod
+    def mutate(cls, root, info, id):
+        project = Project.objects.get(pk=id)
+        project.delete()
+        return DeleteProject(project=project)
+
+
+#******************* MUTATION *************************#
+class Mutation(graphene.ObjectType):
+    create_keyword = CreateKeyword.Field()
+    update_keyword = UpdateKeyword.Field()
+    delete_keyword = DeleteKeyword.Field()
+
+    create_project = CreateProject.Field()
+    update_project = UpdateProject.Field()
+    delete_project = DeleteProject.Field()
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
 
 
