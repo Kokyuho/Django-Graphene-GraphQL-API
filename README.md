@@ -25,7 +25,3 @@ to perform CRUD operations on a 'Projects' database.
 - createProject
 - updateProject
 - deleteProject
-
-### To Do:
-- Implement unit testing of all
-- Implement continuous integration with github actions
