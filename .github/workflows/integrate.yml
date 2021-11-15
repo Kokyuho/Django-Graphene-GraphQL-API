@@ -1,0 +1,17 @@
+name: Django-Graphne-GraphQL-API CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  test_pull_request:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - run: pip install -r requirements.txt
+      - run: pytest
+      - run: python manage.py runserver
